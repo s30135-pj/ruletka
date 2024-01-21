@@ -10,7 +10,7 @@ struct Gra {
 	const double ilosc_naboi[4] = { 0, 4, 6 ,8 };
 	const double prawdziwe[4] = { 0, 50, 66, 75 };
 	//dane obecnej instancji gry
-	int tura = 2;
+	int tura = 1;
 	int nr_naboju = 1;
 	int* naboje = nullptr;
 	//funkcja odpowiadajaca za losowe zaladowanie broni
@@ -23,6 +23,8 @@ struct Gra {
 		//obliczenie ile powinno byc naboi prawdziwych a ile falszywych
 		int prawdziwe = ceil((ile * szansa) / 100);
 		int falszywe = ile - prawdziwe;
+		cout << "Naboi prawdziwych " << prawdziwe << endl;
+		cout << "Naboi falszywych " << falszywe << endl;
 		//inicjalizacja randa
 		srand((unsigned)time(0));
 		//wypelnienie tabeli wartosciami
@@ -45,19 +47,53 @@ struct Gra {
 };
 //struktura odpowiadajaca za gracza
 struct Gracz {
+	string nazwa;
 	int zycia;
 	int przedmioty;
+	//funkcja do strzelania
+	void strzel(Gracz *cel, int naboj) {
+		if (cel != this) {
+			cout << nazwa << " strzela do gracza " << cel->nazwa << endl;
+		}
+		else {
+			cout << nazwa << " strzela do siebie" << endl;
+		}
+		if (naboj) {
+			cel->zycia--;
+			cout << "Rewolwer wystrzelił, pozostałe życia gracza " << cel->nazwa << " to " << cel->zycia << endl;
+		}
+		else {
+			cout << "Pusty nabój, strzał nieudany" << endl;
+		}
+	}
 };
+
+//funkcja gry
+void graj() {
+	Gra ruletka;
+	Gracz komputer = {"Komputer"};
+	Gracz czlowiek = {"Gracz"};
+	komputer.zycia = ruletka.zycia[ruletka.tura];
+	czlowiek.zycia = ruletka.zycia[ruletka.tura];
+	czlowiek.przedmioty = ruletka.zycia[ruletka.tura];
+	ruletka.zaladuj_bron();
+	//tutaj zaprezentowanie jak działa funkcja, do strzelania
+	for (int i = 0; i < ruletka.ilosc_naboi[ruletka.tura]; i++) {
+		if (i % 2) komputer.strzel(&czlowiek, ruletka.naboje[i]);
+		else czlowiek.strzel(&komputer, ruletka.naboje[i]);
+	}
+	ruletka.rozladuj_bron();
+}
 int main() {
 	setlocale(LC_CTYPE, "Polish");
 	int wybor;
-	cout << "Wprowadź '1' aby rozpocząć grę" << endl;
-	cout << "Wprowadź '2' aby zakończyć grę" << endl;
 	while (true) {
+		cout << "Wprowadź '1' aby rozpocząć grę" << endl;
+		cout << "Wprowadź '2' aby zakończyć grę" << endl;
 		if (cin >> wybor) {
 			if (wybor == 1) {
 				cout << "Wybrano rozpoczecie gry\n";
-				break; // Zakończenie pętli, program idzie dalej
+				graj();
 			}
 			else if (wybor == 2) {
 				cout << "Wybrano zakonczenie gry\n";
@@ -73,11 +109,5 @@ int main() {
 			cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Ignorowanie niepoprawnych danych
 		}
 	}
-	Gra ruletka;
-	ruletka.zaladuj_bron();
-	for (int i = 0; i < ruletka.ilosc_naboi[2]; i++) {
-		if (ruletka.naboje[i] == 1) cout << "prawdziwy" << endl;
-		else cout << "falszywy" << endl;
-	}
-	ruletka.rozladuj_bron();
+
 }
