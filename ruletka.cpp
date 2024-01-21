@@ -52,12 +52,14 @@ struct Gracz {
 	int przedmioty;
 	//funkcja do strzelania
 	void strzel(Gracz *cel, int naboj) {
+		//sprawdzenie czy cel nie jest graczem i wyswietlenie odpowiedniej wiadomosci
 		if (cel != this) {
 			cout << nazwa << " strzela do gracza " << cel->nazwa << endl;
 		}
 		else {
 			cout << nazwa << " strzela do siebie" << endl;
 		}
+		//sprawdzenie czy nabój jest prawdziwy czy nie
 		if (naboj) {
 			cel->zycia--;
 			cout << "Rewolwer wystrzelił, pozostałe życia gracza " << cel->nazwa << " to " << cel->zycia << endl;
@@ -70,9 +72,11 @@ struct Gracz {
 
 //funkcja gry
 void graj() {
+	//utworzenie gracza i gry
 	Gra ruletka;
 	Gracz komputer = {"Komputer"};
 	Gracz czlowiek = {"Gracz"};
+	//to powinno być w pętli, z odpowiednimi wiadomościami i logiką zachowania komputera
 	komputer.zycia = ruletka.zycia[ruletka.tura];
 	czlowiek.zycia = ruletka.zycia[ruletka.tura];
 	czlowiek.przedmioty = ruletka.zycia[ruletka.tura];
