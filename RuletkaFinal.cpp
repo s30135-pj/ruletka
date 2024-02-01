@@ -60,6 +60,11 @@ struct Gra {
   }
 
   void uzyjPrzedmiotu(Gracz* gracz); // Deklaracja wstępna funkcji uzyjPrzedmiotu
+
+  ~Gra() {
+    delete[] bron;
+    delete[] przedmioty;
+  }
 };
 
 struct Gracz {
@@ -106,7 +111,7 @@ int turaKomputera(Gracz& komputer, Gracz& czlowiek, Gra& ruletka, int runda) {
       }
       // W przypadku pustego strzału do siebie, komputer kontynuuje turę
       if (ruletka.bron[ruletka.indeksNaboju] == 0)
-      return turaKomputera(komputer, czlowiek, ruletka, runda);
+        return turaKomputera(komputer, czlowiek, ruletka, runda);
     }
   }
   return 1; // Gra toczy się dalej
@@ -209,7 +214,7 @@ void graj() {
           cout << czlowiek.nazwa << " wygrywa runde " << runda << "!\n";
           break;
         }
-        
+
       }
       else {
         cout << "Wprowadz poprawne dane\n";
